@@ -1,0 +1,47 @@
+# mental-health-assistant/docker-compose.yml
+version: '3.8'
+
+services:
+  # PostgreSQL Database Service
+  db:
+    image: postgres:16-alpine # Using a lightweight PostgreSQL image
+    restart: always
+    environment:
+      POSTGRES_DB: mental_health_db # Your database name
+      POSTGRES_USER: user # Your database user
+      POSTGRES_PASSWORD: password # Your database password (CHANGE THIS FOR PRODUCTION!)
+    volumes:
+      - postgres_data:/var/lib/postgresql/data # Persist database data
+    ports:
+      - "5432:5432" # Map host port 5432 to container port 5432
+
+  # Ollama Service for Local LLMs
+  ollama:
+    image: ollama/ollama
+    restart: always
+    volumes:
+      - ollama_models:/root/.ollama # Persist downloaded models
+    ports:
+      - "11434:11434" # Default Ollama API port
+    # Optional: Command to serve and health check
+    command: serve
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:11434"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # ChromaDB Service (Optional - You can also run Chroma in-process with Python)
+  # If you choose to run Chroma as a separate service, uncomment this block
+  # chroma:
+  #   image: ghcr.io/chroma-core/chroma:latest
+  #   restart: always
+  #   volumes:
+  #     - chroma_data:/app/chroma/chroma # Persist Chroma data
+  #   ports:
+  #     - "8000:8000" # Default Chroma port (can conflict with FastAPI, adjust if needed)
+
+volumes:
+  postgres_data:
+  ollama_models:
+  # chroma_data: # Uncomment if using Chroma service

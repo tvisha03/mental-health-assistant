@@ -1,0 +1,40 @@
+# .gitignore for mental-health-assistant/
+
+# Python
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+*.env # IMPORTANT: Do NOT commit your .env files with secrets!
+
+# Node.js / Next.js
+node_modules/
+.next/
+out/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.env.local # Next.js specific local env file
+
+# Docker volumes
+# These are managed by Docker Compose and should not be in Git
+# The actual paths might vary, but typically it's named volumes
+# and not raw folders in your project unless you changed paths.
+# If you put chroma_data directly in your project root, add it here.
+# Examples if they were in your project dir:
+# postgres_data/
+# ollama_models/
+# chroma_data/
+# You generally want to keep Docker Compose volumes outside the project.
+
+# Operating System / IDE specific files
+.DS_Store # macOS
+.vscode/ # VS Code settings specific to your machine (optional, depends on team preference)
+.idea/ # IntelliJ / PyCharm
+*.swp # Vim swap files
