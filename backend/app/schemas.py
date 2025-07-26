@@ -31,3 +31,59 @@ class Token(BaseModel):
 # Pydantic model for Token Data (what's inside the JWT)
 class TokenData(BaseModel):
     email: Optional[str] = None
+
+
+# --- MOOD ENTRY SCHEMAS ---
+
+# Pydantic model for creating a Mood Entry
+class MoodEntryCreate(BaseModel):
+    mood_value: int # e.g., 1 to 5
+    notes: Optional[str] = None
+
+# Pydantic model for Mood Entry response (what we send back)
+class MoodEntry(BaseModel):
+    id: int
+    mood_value: int
+    notes: Optional[str] = None
+    timestamp: datetime
+    owner_id: int
+
+    model_config = {"from_attributes": True}
+
+
+# --- JOURNAL ENTRY SCHEMAS ---
+
+# Pydantic model for creating a Journal Entry
+class JournalEntryCreate(BaseModel):
+    title: Optional[str] = None
+    content: str
+
+# Pydantic model for Journal Entry response
+class JournalEntry(BaseModel):
+    id: int
+    title: Optional[str] = None
+    content: str
+    timestamp: datetime
+    owner_id: int
+
+    model_config = {"from_attributes": True}
+
+
+# --- GOAL SCHEMAS ---
+
+# Pydantic model for creating a Goal (placeholder for now)
+class GoalCreate(BaseModel):
+    description: str
+    target_date: Optional[datetime] = None # Or use date type if you prefer just date
+    completed: bool = False
+
+class Goal(BaseModel):
+    id: int
+    description: str
+    target_date: Optional[datetime] = None
+    completed: bool
+    created_at: datetime
+    updated_at: Optional[datetime] = None
+    owner_id: int
+
+    model_config = {"from_attributes": True}

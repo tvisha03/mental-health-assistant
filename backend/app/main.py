@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from .database import engine, Base # Import engine and Base for table creation (for initial dev)
 from .auth import routes as auth_routes # Import auth routes
+from .api import mood, journal # <-- ADDED: Import new routers
 
 # Create all database tables (for development, Alembic handles this in production)
 # This will try to create tables if they don't exist based on your models.
@@ -33,13 +34,13 @@ app.add_middleware(
 
 # Include your API routers
 app.include_router(auth_routes.router)
+app.include_router(mood.router)    # <-- ADDED
+app.include_router(journal.router) # <-- ADDED
 
 @app.get("/")
 def read_root():
     return {"message": "Welcome to the Mental Health Assistant API!"}
 
-# You can add more routers here later for mood, journal, etc.
-# from .api import mood, journal, chat
-# app.include_router(mood.router)
-# app.include_router(journal.router)
+# You can add more routers here later for chat, etc.
+# from .api import chat
 # app.include_router(chat.router)
