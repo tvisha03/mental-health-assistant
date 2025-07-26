@@ -13,7 +13,7 @@ class User(Base):
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 
     # Relationships (will add later)
-    mood_entries = relationship("MoodEntry", back_populates="owner")
-    journal_entries = relationship("JournalEntry", back_populates="owner")
-    goals = relationship("Goal", back_populates="owner")
+    #mood_entries = relationship("MoodEntry", back_populates="owner")
+    #journal_entries = relationship("JournalEntry", back_populates="owner")
+    #goals = relationship("Goal", back_populates="owner")
     # Add other relationships as you create those models
