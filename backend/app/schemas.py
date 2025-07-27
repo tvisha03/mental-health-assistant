@@ -1,6 +1,6 @@
 from pydantic import BaseModel, EmailStr
 from datetime import datetime
-from typing import Optional
+from typing import Optional, List # <-- ADD List import
 
 # Pydantic model for user creation (what we expect from client for registration)
 class UserCreate(BaseModel):
@@ -39,6 +39,7 @@ class TokenData(BaseModel):
 class MoodEntryCreate(BaseModel):
     mood_value: int # e.g., 1 to 5
     notes: Optional[str] = None
+    tags: Optional[List[str]] = None # <-- ADD THIS LINE: list of strings for tags
 
 # Pydantic model for Mood Entry response (what we send back)
 class MoodEntry(BaseModel):
@@ -47,6 +48,7 @@ class MoodEntry(BaseModel):
     notes: Optional[str] = None
     timestamp: datetime
     owner_id: int
+    tags: Optional[List[str]] = None # <-- ADD THIS LINE
 
     model_config = {"from_attributes": True}
 

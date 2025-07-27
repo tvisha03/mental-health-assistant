@@ -80,3 +80,15 @@ def delete_journal_entry(
     if db_journal_entry is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Journal entry not found")
     return
+
+# --- NEW ROUTE for Journal Streak ---
+@router.get("/streak/", response_model=Dict[str, int]) # Returns a dictionary like {"streak": 5}
+def get_journal_streak_api(
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user)
+):
+    """
+    Retrieve the current consecutive daily journal streak for the authenticated user.
+    """
+    streak = crud.get_journal_streak(db=db, user_id=current_user.id)
+    return {"streak": streak}

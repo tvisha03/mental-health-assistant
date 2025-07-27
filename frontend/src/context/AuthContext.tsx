@@ -4,7 +4,7 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import axios from 'axios';
 import apiClient from '@/lib/api'; // Use alias @/lib/api for cleaner imports
-import { User, UserLogin, UserCreate, Token } from '@/types'; // Import your types
+import { User, UserLogin, UserCreate, Token, JournalStreak } from '@/types'; // <-- IMPORT JournalStreak
 
 interface AuthContextType {
   user: User | null;
@@ -13,6 +13,7 @@ interface AuthContextType {
   login: (credentials: UserLogin) => Promise<User | null>;
   register: (userData: UserCreate) => Promise<User | null>;
   logout: () => void;
+  journalStreak: number | null; // <-- ADD journalStreak to context type
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -21,31 +22,40 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [journalStreak, setJournalStreak] = useState<number | null>(null); // <-- ADD state for streak
 
   useEffect(() => {
     const storedToken = localStorage.getItem('access_token');
     if (storedToken) {
       setToken(storedToken);
-      // Optionally, you could make an API call here to /auth/users/me
-      // to validate the token and fetch user data on app load.
-      // For now, we'll assume the token is valid for simplicity.
-      fetchUserFromToken(storedToken);
+      fetchUserDataAndStreak(storedToken); // <-- Call combined fetch function
+    } else {
+      setIsLoading(false); // If no token, no loading needed
     }
-    setIsLoading(false);
   }, []);
 
-  const fetchUserFromToken = async (accessToken: string) => {
-    setIsLoading(true);
+  const fetchUserDataAndStreak = async (accessToken: string) => {
+    setIsLoading(true); // Keep loading true until all data is fetched
     try {
-      const response = await apiClient.get<User>('/auth/users/me', {
+      // Fetch user data
+      const userResponse = await apiClient.get<User>('/auth/users/me', {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
       });
-      setUser(response.data);
+      setUser(userResponse.data);
+
+      // Fetch journal streak
+      const streakResponse = await apiClient.get<JournalStreak>('/journal/streak/', {
+        headers: {
+          Authorization: `Bearer ${accessToken}`, // Ensure token is passed
+        },
+      });
+      setJournalStreak(streakResponse.data.streak);
+
     } catch (error) {
-      console.error('Failed to fetch user with token:', error);
-      logout(); // Invalidate token if it's not valid
+      console.error('Failed to fetch user data or streak:', error);
+      logout(); // Invalidate token and log out if any fetch fails
     } finally {
       setIsLoading(false);
     }
@@ -68,7 +78,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       const { access_token } = tokenResponse.data;
       localStorage.setItem('access_token', access_token);
       setToken(access_token);
-      await fetchUserFromToken(access_token); // Fetch user data after login
+      await fetchUserDataAndStreak(access_token); // Fetch user data and streak after login
       return user; // Will be updated by fetchUserFromToken
     } catch (error: unknown) {
       console.error('Login failed:', error);
@@ -113,7 +123,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     // router.push('/login'); // If using Next.js useRouter
   };
 
-  const value = { user, token, isLoading, login, register, logout };
+  const value = { user, token, isLoading, login, register, logout, journalStreak };
 
   return (
     <AuthContext.Provider value={value}>

@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, status, Query
 from sqlalchemy.orm import Session
-from typing import List
+from typing import List, Dict, Any # <-- ensure Dict, Any are imported if not already
 
 from .. import schemas, crud, models
 from ..database import get_db
@@ -62,3 +62,16 @@ def delete_mood_entry(
     if db_mood_entry is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Mood entry not found")
     return
+
+# --- NEW ROUTE for Mood Trends ---
+@router.get("/trends/", response_model=List[Dict[str, Any]]) # Or define a new Pydantic schema for this
+def get_mood_trends_api(
+    days: int = Query(7, ge=1, le=365), # Number of days to look back
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user)
+):
+    """
+    Retrieve aggregated daily average mood trends for the authenticated user.
+    """
+    trends = crud.get_mood_trends(db=db, user_id=current_user.id, days=days)
+    return trends
