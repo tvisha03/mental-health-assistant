@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from .database import engine, Base # Import engine and Base for table creation (for initial dev)
 from .auth import routes as auth_routes # Import auth routes
-from .api import mood, journal # <-- ADDED: Import new routers
+from .api import mood, journal, chat # <-- ADDED: Import new routers
 
 # Create all database tables (for development, Alembic handles this in production)
 # This will try to create tables if they don't exist based on your models.
@@ -36,6 +36,7 @@ app.add_middleware(
 app.include_router(auth_routes.router)
 app.include_router(mood.router)    # <-- ADDED
 app.include_router(journal.router) # <-- ADDED
+app.include_router(chat.router)    # <-- ADDED
 
 @app.get("/")
 def read_root():

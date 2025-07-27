@@ -176,3 +176,23 @@ def get_journal_streak(db: Session, user_id: int) -> int:
             break # Gap found, streak broken
 
     return current_streak
+
+
+# --- NEW CRUD Functions for ChatMessage ---
+def create_chat_message(db: Session, user_id: int, content: str, is_user_message: bool):
+    db_chat_message = models.ChatMessage(
+        owner_id=user_id,
+        content=content,
+        is_user_message=is_user_message
+    )
+    db.add(db_chat_message)
+    db.commit()
+    db.refresh(db_chat_message)
+    return db_chat_message
+
+def get_user_chat_messages(db: Session, user_id: int, skip: int = 0, limit: int = 20):
+    """
+    Retrieve chat messages for a specific user, ordered by timestamp.
+    `limit` determines how much history is passed to the LLM.
+    """
+    return db.query(models.ChatMessage).filter(models.ChatMessage.owner_id == user_id).order_by(models.ChatMessage.timestamp).offset(skip).limit(limit).all()

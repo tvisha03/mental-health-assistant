@@ -1,0 +1,141 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2818
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Arial-BoldMT;\f1\froman\fcharset0 Times-Bold;\f2\froman\fcharset0 Times-Roman;
+\f3\fswiss\fcharset0 ArialMT;\f4\fswiss\fcharset0 Arial-ItalicMT;}
+{\colortbl;\red255\green255\blue255;\red0\green0\blue0;\red10\green27\blue79;}
+{\*\expandedcolortbl;;\cssrgb\c0\c0\c0;\cssrgb\c3529\c15686\c38431;}
+{\*\listtable{\list\listtemplateid1\listhybrid{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{disc\}}{\leveltext\leveltemplateid1\'01\uc0\u8226 ;}{\levelnumbers;}\fi-360\li720\lin720 }{\listname ;}\listid1}}
+{\*\listoverridetable{\listoverride\listid1\listoverridecount0\ls1}}
+\paperw11900\paperh16840\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\deftab720
+\pard\pardeftab720\sa415\partightenfactor0
+
+\f0\b\fs50 \cf0 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2 Key facts\
+\pard\tx220\tx720\pardeftab720\li720\fi-720\partightenfactor0
+\ls1\ilvl0
+\f1\fs24 \cf0 \kerning1\expnd0\expndtw0 \outl0\strokewidth0 {\listtext	\uc0\u8226 	}\expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2 Globally, one in seven 10-19-year-olds experiences a mental disorder, accounting for 15% of the global burden of disease in this age group.
+\f2\b0 \
+\ls1\ilvl0
+\f1\b \kerning1\expnd0\expndtw0 \outl0\strokewidth0 {\listtext	\uc0\u8226 	}\expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2 Depression, anxiety and behavioural disorders are among the leading causes of illness and disability among adolescents.
+\f2\b0 \
+\ls1\ilvl0
+\f1\b \kerning1\expnd0\expndtw0 \outl0\strokewidth0 {\listtext	\uc0\u8226 	}\expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2 Suicide \'a0is the third leading cause of death among those aged 15\'9629 years old.
+\f2\b0 \
+\ls1\ilvl0
+\f1\b \kerning1\expnd0\expndtw0 \outl0\strokewidth0 {\listtext	\uc0\u8226 	}\expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2 The consequences of failing to address adolescent mental health conditions extend to adulthood, impairing both physical and mental health and limiting opportunities to lead fulfilling lives as adults.
+\f2\b0 \
+\pard\pardeftab720\sa415\partightenfactor0
+
+\f0\b\fs50 \cf0 Introduction\
+\pard\pardeftab720\sa240\partightenfactor0
+
+\f3\b0\fs24 \cf0 One in six people are aged 10\'9619 years. Adolescence is a unique and formative time. Physical, emotional and social changes, including exposure to poverty, abuse, or violence, can make adolescents vulnerable to mental health problems. Protecting adolescents from adversity, promoting socio-emotional learning and psychological well-being, and ensuring access to mental health care are critical for their health and well-being during adolescence and adulthood.\
+Globally, it is estimated that one in seven (14%) of 10\'9619-year-olds experience mental health conditions\'a0
+\f4\i (1)
+\f3\i0 , yet these remain largely unrecognized and untreated.\
+Adolescents with mental health conditions are particularly vulnerable to social exclusion, discrimination, stigma (affecting readiness to seek help), educational difficulties, risk-taking behaviours, physical ill-health and human rights violations.\
+\pard\pardeftab720\sa415\partightenfactor0
+
+\f0\b\fs50 \cf0 Mental health determinants\
+\pard\pardeftab720\sa240\partightenfactor0
+
+\f3\b0\fs24 \cf0 Adolescence is a crucial period for developing social and emotional habits important for mental well-being. These include adopting healthy sleep patterns; exercising regularly; developing coping, problem-solving, and interpersonal skills; and learning to manage emotions. Protective and supportive environments in the family, at school and in the wider community are important.\
+Multiple factors affect mental health. The more risk factors adolescents are exposed to, the greater the potential impact on their mental health. Factors that can contribute to stress during adolescence include exposure to adversity, pressure to conform with peers and exploration of identity. Media influence and gender norms can exacerbate the disparity between an adolescent\'92s lived reality and their perceptions or aspirations for the future. Other important determinants include the quality of their home life and relationships with peers. Violence (especially sexual violence and bullying), harsh parenting and severe and socioeconomic problems are recognized risks to mental health.\
+Some adolescents are at greater risk of mental health conditions due to their living conditions, stigma, discrimination or exclusion, or lack of access to quality support and services. These include adolescents living in humanitarian and fragile settings; adolescents with chronic illness, autism spectrum disorder, an intellectual disability or other neurological condition; pregnant adolescents, adolescent parents, or those in early or forced marriages; orphans; and adolescents from minority ethnic or sexual backgrounds or other discriminated groups.\
+\pard\pardeftab720\sa415\partightenfactor0
+
+\f0\b\fs50 \cf0 Emotional disorders\
+\pard\pardeftab720\sa240\partightenfactor0
+
+\f3\b0\fs24 \cf0 Emotional disorders are common among adolescents. Anxiety disorders (which may involve panic or excessive worry) are the most prevalent in this age group and are more common among older than among younger adolescents. It is estimated that 4.4% of 10\'9614-year-olds and 5.5% of 15\'9619-year-olds experience an anxiety disorder\'a0
+\f4\i (1)
+\f3\i0 . Depression is estimated to occur among 1.4% of adolescents aged 10\'9614 years, and 3.5% of 15\'9619-year-olds\'a0
+\f4\i (1)
+\f3\i0 . Depression and anxiety share some of the same symptoms, including rapid and unexpected changes in mood.\
+Anxiety and depressive disorders can profoundly affect school attendance and schoolwork. Social withdrawal can exacerbate isolation and loneliness. Depression can lead to suicide.\
+\pard\pardeftab720\sa415\partightenfactor0
+
+\f0\b\fs50 \cf0 Behavioural disorders\
+\pard\pardeftab720\sa240\partightenfactor0
+
+\f3\b0\fs24 \cf0 Behavioural disorders are more common among younger adolescents than older adolescents. Attention deficit hyperactivity disorder (ADHD), characterized by difficulty paying attention and/or excessive activity and acting without regard to consequences, occurs among 2.9% of 10\'9614-year-olds and 2.2% of 15\'9619-year-olds\'a0
+\f4\i (1)
+\f3\i0 . Conduct disorder (involving symptoms of destructive or challenging behaviour) occurs among 3.5% of 10\'9614-year-olds and 1.9% of 15\'9619-year-olds\'a0
+\f4\i (1)
+\f3\i0 . Behavioural disorders \'a0can affect adolescents\'92 education and increases the risk of criminal behaviour.\
+\pard\pardeftab720\sa415\partightenfactor0
+
+\f0\b\fs50 \cf0 Eating disorders\
+\pard\pardeftab720\sa240\partightenfactor0
+
+\f3\b0\fs24 \cf0 Eating disorders, such as anorexia nervosa and bulimia nervosa, commonly emerge during adolescence and young adulthood. Eating disorders involve abnormal eating behaviour and preoccupation with food, accompanied in most instances by concerns about body weight and shape. Girls are more commonly affected than boys. Eating disorders can affect physical health and often co-exist with depression, anxiety and substance use disorders. They occur in an estimated 0.1% of 10\'9614-year-olds and and 0.4% of 15\'9619-year-olds (1). They are associated with suicide. Anorexia nervosa can lead to premature death, often due to medical complications or suicide, and has higher mortality than any other mental disorder.\
+\pard\pardeftab720\sa415\partightenfactor0
+
+\f0\b\fs50 \cf0 Psychosis\
+\pard\pardeftab720\sa240\partightenfactor0
+
+\f3\b0\fs24 \cf0 Conditions that include symptoms of psychosis most commonly emerge in late adolescence or early adulthood. Symptoms can include hallucinations or delusions. These experiences can impair an adolescent\'92s ability to participate in daily life and education and often lead to stigma or human rights violations. Schizophrenia occurs in 0.1% of 15\'9619-year-olds\'a0
+\f4\i (1)
+\f3\i0 .\
+\pard\pardeftab720\sa415\partightenfactor0
+
+\f0\b\fs50 \cf0 Suicide and self-harm\
+\
+\pard\pardeftab720\sa240\partightenfactor0
+
+\f3\b0\fs24 \cf0 Suicide is the third leading cause of death in older adolescents and young adults (15\'9629 years)\'a0
+\f4\i (2)
+\f3\i0 . Risk factors for suicide are multifaceted, and include harmful use of alcohol, abuse in childhood, stigma against help-seeking, barriers to accessing care and access to means of suicide. Digital media, like any other media, can play a significant role in either enhancing or weakening suicide prevention efforts.\
+\pard\pardeftab720\sa415\partightenfactor0
+
+\f0\b\fs50 \cf0 Risk-taking behaviours\
+\pard\pardeftab720\sa240\partightenfactor0
+
+\f3\b0\fs24 \cf0 Many risk-taking behaviours for health, such as substance use or sexual risk-taking, start during adolescence. Risk-taking behaviours can be an unhelpful strategy to cope with emotional difficulties and can severely impact an adolescent\'92s mental and physical well-being.\
+Young people are especially vulnerable to developing harmful substance use patterns that can persist across the lifespan. In 2019, the prevalence of alcohol use among 15\'9619-year-olds was high worldwide (22%) with very few gender differences, and showing an increase in consumption in some regions\'a0
+\f4\i (3).
+\f3\i0 \
+The use of tobacco and cannabis are additional concerns. Many adult smokers had their first cigarette prior to the age of 18 years. \'a0In 2022, the prevalence of cannabis use among adolescents was higher than that of adults globally (5.5 per cent compared with 4.4 per cent, respectively)\'a0
+\f4\i (4).
+\f3\i0 \
+Perpetration of violence is a risk-taking behaviour that can increase the likelihood of low educational attainment, injury, involvement with crime or death. Interpersonal violence was ranked among the leading causes of death of older adolescents in 2021\'a0
+\f4\i (1)
+\f3\i0 .\
+\'a0\
+\pard\pardeftab720\sa415\partightenfactor0
+
+\f0\b\fs50 \cf0 Promotion and prevention\
+\pard\pardeftab720\sa240\partightenfactor0
+
+\f3\b0\fs24 \cf0 Mental health promotion and prevention interventions aim to
+\f0\b \'a0
+\f3\b0 strengthen an individual's capacity to regulate emotions, enhance alternatives to risk-taking behaviours, build resilience for managing difficult situations and adversity, and promote supportive social environments and social networks.\
+These programmes require a multi-level approach with varied delivery platforms\'a0\'96
+\f0\b \'a0
+\f3\b0 for example, digital media, health or social care settings, schools or the community \'96 and varied strategies to reach adolescents, particularly the most vulnerable.\
+\pard\pardeftab720\sa415\partightenfactor0
+
+\f0\b\fs50 \cf0 Early detection and treatment\
+\pard\pardeftab720\sa240\partightenfactor0
+
+\f3\b0\fs24 \cf0 It is crucial to address the needs of adolescents with mental health conditions. Avoiding institutionalization and over-medicalization, prioritizing non-pharmacological approaches, and respecting the rights of children in line with the United Nations Convention on the Rights of the Child and other human rights instruments are key for adolescents\'92 mental health.\
+\pard\pardeftab720\sa415\partightenfactor0
+
+\f0\b\fs50 \cf0 WHO response\
+\pard\pardeftab720\sa240\partightenfactor0
+
+\f3\b0\fs24 \cf0 WHO works on strategies, programmes and tools to assist governments in responding to the health needs of adolescents.\
+For example, the Helping Adolescents Thrive (HAT) Initiative is a joint WHO-UNICEF effort to strengthen policies and programmes for the mental health of adolescents. More specifically, the efforts made through the Initiative are to promote mental health and prevent mental health conditions. They are also intended to help prevent self-harm and other risk behaviours, such as harmful use of alcohol and drugs, that have a negative impact on the mental\'a0 \uc0\u822 \'a0 and physical\'a0 \u822 \'a0 health of young people.\
+WHO has also developed a module on Child and Adolescent Mental and Behavioural Disorders as part of the mhGAP Intervention Guide 2.0. This Guide provides evidence-based clinical protocols for the assessment and management of a range of mental health conditions in non-specialized care settings.\
+Furthermore, WHO is developing and testing scalable psychological interventions to address emotional disorders of adolescents, and guidance on mental health services for adolescents.\
+WHO\'92s Regional Office for the Eastern Mediterranean has developed a mental health training package for educators for improved understanding of the importance of mental health in the school setting and to guide the implementation of strategies to promote, protect and restore mental health among their students. It includes training manuals and materials to help scale up the number of schools promoting mental health.\
+(1)\'a0 Institute of health Metrics and Evaluation.\'a0{\field{\*\fldinst{HYPERLINK "http://ghdx.healthdata.org/gbd-results-tool?params=gbd-api-2019-permalink/380dfa3f26639cb711d908d9a119ded2"}}{\fldrslt \cf3 \strokec3 Global Health Data Exchange}}\'a0(GHDx)\
+(2)\'a0{\field{\*\fldinst{HYPERLINK "https://www.who.int/data/global-health-estimates"}}{\fldrslt \cf3 \strokec3 WHO Global Health Estimates 2000-2021}}\
+(3)\'a0{\field{\*\fldinst{HYPERLINK "https://apps.who.int/iris/bitstream/handle/10665/274603/9789241565639-eng.pdf?ua=1&ua=1"}}{\fldrslt \cf3 \strokec3 Global status report on alcohol and health and treatment of substance use disorders 202}}4\
+\'a0 (4) World Drug Report. Geneva: UNODC; 2024(\
+\
+}

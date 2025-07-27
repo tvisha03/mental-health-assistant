@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, DateTime, func, Boolean, ForeignKey
+from sqlalchemy import Column, Integer, String, DateTime, func, Boolean, ForeignKey, Text
 from sqlalchemy.orm import relationship
 # --- NEW IMPORT for PostgreSQL Array type ---
 from sqlalchemy.dialects.postgresql import ARRAY # <-- ADD THIS IMPORT
@@ -19,6 +19,7 @@ class User(Base):
     mood_entries = relationship("MoodEntry", back_populates="owner", cascade="all, delete-orphan")
     journal_entries = relationship("JournalEntry", back_populates="owner", cascade="all, delete-orphan")
     goals = relationship("Goal", back_populates="owner", cascade="all, delete-orphan")
+    chat_messages = relationship("ChatMessage", back_populates="owner", cascade="all, delete-orphan")
 
 # --- MODIFIED MODEL: MoodEntry (add 'tags' column) ---
 class MoodEntry(Base):
@@ -56,3 +57,15 @@ class Goal(Base):
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
     owner_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     owner = relationship("User", back_populates="goals")
+
+# --- NEW MODEL: ChatMessage for conversational memory ---
+class ChatMessage(Base):
+    __tablename__ = "chat_messages"
+
+    id = Column(Integer, primary_key=True, index=True)
+    owner_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    content = Column(Text, nullable=False) # Use Text for potentially long messages
+    timestamp = Column(DateTime(timezone=True), server_default=func.now())
+    is_user_message = Column(Boolean, nullable=False) # True if from user, False if from AI
+
+    owner = relationship("User", back_populates="chat_messages")

@@ -77,3 +77,11 @@ export interface Goal {
 export interface JournalStreak {
   streak: number;
 }
+
+export interface ChatMessage {
+  id: number;
+  owner_id: number;
+  content: string;
+  timestamp: string;
+  is_user_message: boolean;
+}

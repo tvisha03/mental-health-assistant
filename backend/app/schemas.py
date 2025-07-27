@@ -89,3 +89,18 @@ class Goal(BaseModel):
     owner_id: int
 
     model_config = {"from_attributes": True}
+
+# --- NEW SCHEMA: ChatMessage ---
+class ChatMessage(BaseModel):
+    id: int
+    owner_id: int
+    content: str
+    timestamp: datetime
+    is_user_message: bool
+
+    # IMPORTANT: Adjust based on your Pydantic version
+    # For Pydantic v1.x.x
+    class Config:
+        orm_mode = True
+    # For Pydantic v2.x.x (uncomment this if you're on V2 and comment out the above)
+    # model_config = {"from_attributes": True}
