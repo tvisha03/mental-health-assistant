@@ -18,7 +18,7 @@ interface UIMessage {
 }
 
 export default function ChatPage() {
-  const { user, isLoading } = useAuth();
+  const { user, isLoading, isAuthReady, token } = useAuth(); // <-- Get `token` as well
   const router = useRouter();
   const [messages, setMessages] = useState<UIMessage[]>([]);
   const [inputMessage, setInputMessage] = useState('');
@@ -37,13 +37,21 @@ export default function ChatPage() {
 
   // Redirect if not authenticated and fetch history on first load
   useEffect(() => {
-    if (!isLoading && !user) {
+    // 1. If auth check is ready AND user is NOT authenticated, redirect
+    if (isAuthReady && !user) {
+      console.log('CHAT_PAGE_EFFECT: Not authenticated, redirecting to login.');
       router.push('/login');
-    } else if (user && initialLoadRef.current) {
+      return; // IMPORTANT: Exit early after redirect
+    }
+
+    // 2. If auth check is ready AND user IS authenticated AND we have a token, fetch data
+    // Also, ensure `user` is not null before attempting fetches
+    if (isAuthReady && user && token && initialLoadRef.current) { // <-- Only fetch if user and token are present
+      console.log('CHAT_PAGE_EFFECT: User authenticated, fetching chat history.');
       fetchChatHistory();
       initialLoadRef.current = false; // Set to false after initial load
     }
-  }, [user, isLoading, router]);
+  }, [user, isAuthReady, token, router]); // <-- Add `token` to dependencies
 
 
   const fetchChatHistory = async () => {
@@ -108,8 +116,17 @@ export default function ChatPage() {
     }
   };
 
-  if (isLoading || !user) {
+  // Render loading state while auth status is being determined
+  if (!isAuthReady) {
+    console.log('CHAT_PAGE_RENDER: isAuthReady is false, showing loading...');
     return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+  }
+
+  // If auth is ready but user is null, this component will return null,
+  // and the useEffect above will handle the redirect.
+  if (!user) {
+    console.log('CHAT_PAGE_RENDER: isAuthReady true, user is null, returning null (redirect expected).');
+    return null;
   }
 
   return (

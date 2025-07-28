@@ -16,7 +16,7 @@ export default function Header() {
       <nav className="max-w-7xl mx-auto flex justify-between items-center">
         {/* Logo/Site Title */}
         <Link href="/dashboard" className="text-2xl font-bold text-blue-600 dark:text-blue-300 hover:text-blue-700 dark:hover:text-blue-400 transition-colors duration-200">
-          MyHealth AI
+          Bloomth AI
         </Link>
 
         {/* Navigation Links (Right Side) */}
@@ -56,6 +56,11 @@ export default function Header() {
                     <Link href="/resources" className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600" onClick={() => setDropdownOpen(false)}>
                       Resources
                     </Link>
+                    {/* --- ADD INSIGHTS LINK --- */}
+                    <Link href="/insights" className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600" onClick={() => setDropdownOpen(false)}>
+                      Insights
+                    </Link>
+                    {/* --- END ADDITION --- */}
                     <hr className="border-gray-200 dark:border-gray-600 my-1" />
                     <button
                       onClick={() => { logout(); setDropdownOpen(false); }}

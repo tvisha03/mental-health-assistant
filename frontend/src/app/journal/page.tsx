@@ -13,6 +13,18 @@ import 'react-calendar/dist/Calendar.css';
 import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
 
+const SENTIMENT_EMOJIS: { [key: string]: string } = {
+  'Positive': '😊',
+  'Negative': '😞',
+  'Neutral': '😐',
+};
+
+const SENTIMENT_COLORS: { [key: string]: string } = {
+  'Positive': 'text-green-600 dark:text-green-300',
+  'Negative': 'text-red-600 dark:text-red-300',
+  'Neutral': 'text-gray-600 dark:text-gray-400',
+};
+
 
 
 
@@ -23,16 +35,7 @@ export default function JournalPage() {
   const journalDates = useMemo(() => {
     return new Set(journalEntries.map((entry: JournalEntry) => new Date(entry.timestamp).toISOString().split('T')[0]));
   }, [journalEntries]);
-  const tileClassName = ({ date, view }: { date: Date; view: string }) => {
-    if (view === 'month') {
-      const dateString = date.toISOString().split('T')[0];
-      if (journalDates.has(dateString)) {
-        return 'highlight-journal-day';
-      }
-    }
-    return null;
-  };
-  const { user, isLoading } = useAuth();
+  const { user, isLoading, isAuthReady, token } = useAuth(); // <-- Get `token` as well
   const router = useRouter();
   const [title, setTitle] = useState<string>('');
   const [content, setContent] = useState<string>('');
@@ -47,12 +50,21 @@ export default function JournalPage() {
   // --- End new states ---
 
   useEffect(() => {
-    if (!isLoading && !user) {
+    // 1. If auth check is ready AND user is NOT authenticated, redirect
+    if (isAuthReady && !user) {
+      console.log('JOURNAL_PAGE_EFFECT: Not authenticated, redirecting to login.');
       router.push('/login');
-    } else if (user) {
+      return; // IMPORTANT: Exit early after redirect
+    }
+
+    // 2. If auth check is ready AND user IS authenticated AND we have a token, fetch data
+    // Also, ensure `user` is not null before attempting fetches
+    if (isAuthReady && user && token) { // <-- Only fetch if user and token are present
+      console.log('JOURNAL_PAGE_EFFECT: User authenticated, fetching journal data.');
       fetchJournalEntries();
     }
-  }, [user, isLoading, router]);
+    // The empty else-if (isLoading && !user) path is now covered by `!isAuthReady` initial render.
+  }, [user, isAuthReady, token, router]); // <-- Add `token` to dependencies
 
   const fetchJournalEntries = async () => {
     setLoadingEntries(true);
@@ -141,9 +153,29 @@ export default function JournalPage() {
   }, [journalEntries, searchTerm, startDate, endDate]);
   // --- End filtered entries logic ---
 
-  if (isLoading || !user) {
+  // Render loading state while auth status is being determined
+  if (!isAuthReady) {
+    console.log('JOURNAL_PAGE_RENDER: isAuthReady is false, showing loading...');
     return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
   }
+
+  // If auth is ready but user is null, this component will return null,
+  // and the useEffect above will handle the redirect.
+  if (!user) {
+    console.log('JOURNAL_PAGE_RENDER: isAuthReady true, user is null, returning null (redirect expected).');
+    return null;
+  }
+
+  // Fix: tileClassName must be defined before use
+  const tileClassName = ({ date, view }: { date: Date; view: string }) => {
+    if (view === 'month') {
+      const dateString = date.toISOString().split('T')[0];
+      if (journalDates.has(dateString)) {
+        return 'highlight-journal-day';
+      }
+    }
+    return null;
+  };
 
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-gray-800 p-8">
@@ -274,19 +306,33 @@ export default function JournalPage() {
                     <h3 className="text-xl font-medium text-purple-800 dark:text-purple-300">
                       {entry.title || `Entry #${entry.id}`}
                     </h3>
-                    <div className="flex space-x-2">
-                      <button
-                        onClick={() => handleEditClick(entry)}
-                        className="text-blue-500 hover:text-blue-700 dark:text-blue-300 dark:hover:text-blue-100 text-sm font-medium"
-                      >
-                        Edit
-                      </button>
-                      <button
-                        onClick={() => handleDeleteClick(entry.id)}
-                        className="text-red-500 hover:text-red-700 dark:text-red-300 dark:hover:text-red-100 text-sm font-medium"
-                      >
-                        Delete
-                      </button>
+                    <div className="flex items-center space-x-4">
+                      {/* --- ADD SENTIMENT DISPLAY HERE --- */}
+                      {entry.sentiment_label && (
+                        <div className="flex items-center text-sm font-semibold">
+                          <span className={`mr-1 ${SENTIMENT_COLORS[entry.sentiment_label]}`}>
+                            {SENTIMENT_EMOJIS[entry.sentiment_label]}
+                          </span>
+                          <span className={SENTIMENT_COLORS[entry.sentiment_label]}>
+                            {entry.sentiment_label}
+                          </span>
+                        </div>
+                      )}
+                      {/* --- END SENTIMENT DISPLAY --- */}
+                      <div className="flex space-x-2">
+                        <button
+                          onClick={() => handleEditClick(entry)}
+                          className="text-blue-500 hover:text-blue-700 dark:text-blue-300 dark:hover:text-blue-100 text-sm font-medium"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          onClick={() => handleDeleteClick(entry.id)}
+                          className="text-red-500 hover:text-red-700 dark:text-red-300 dark:hover:text-red-100 text-sm font-medium"
+                        >
+                          Delete
+                        </button>
+                      </div>
                     </div>
                   </div>
                   {/* Render Markdown content */}

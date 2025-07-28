@@ -10,6 +10,8 @@ import Link from 'next/link';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'; // <-- Import Recharts components
 import Select from 'react-select'; // <-- Import react-select
 
+
+
 interface MoodTrendData {
   date: string;
   average_mood: number;
@@ -31,7 +33,7 @@ const MOOD_COLORS: { [key: number]: string } = {
   5: 'bg-blue-100 border-blue-300',
 };
 
-const TAG_OPTIONS = [ // Example tags, you might load these dynamically later
+const TAG_OPTIONS = [
   { value: 'work', label: 'Work' },
   { value: 'stress', label: 'Stress' },
   { value: 'family', label: 'Family' },
@@ -44,27 +46,35 @@ const TAG_OPTIONS = [ // Example tags, you might load these dynamically later
   { value: 'health', label: 'Health' },
 ];
 
-
 export default function MoodPage() {
-  const { user, isLoading } = useAuth();
+  const { user, isLoading, isAuthReady, token } = useAuth(); // <-- Get `token` as well
   const router = useRouter();
   const [moodValue, setMoodValue] = useState<number>(3);
   const [notes, setNotes] = useState<string>('');
-  const [selectedTags, setSelectedTags] = useState<any[]>([]); // For react-select
+  const [selectedTags, setSelectedTags] = useState<any[]>([]);
   const [moodEntries, setMoodEntries] = useState<MoodEntry[]>([]);
-  const [moodTrends, setMoodTrends] = useState<MoodTrendData[]>([]); // State for trend data
+  const [moodTrends, setMoodTrends] = useState<MoodTrendData[]>([]);
   const [loadingEntries, setLoadingEntries] = useState(true);
-  const [loadingTrends, setLoadingTrends] = useState(true); // New loading state for trends
+  const [loadingTrends, setLoadingTrends] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!isLoading && !user) {
+    // 1. If auth check is ready AND user is NOT authenticated, redirect
+    if (isAuthReady && !user) {
+      console.log('MOOD_PAGE_EFFECT: Not authenticated, redirecting to login.');
       router.push('/login');
-    } else if (user) {
-      fetchMoodEntries();
-      fetchMoodTrends(); // Fetch trends on load
+      return; // IMPORTANT: Exit early after redirect
     }
-  }, [user, isLoading, router]);
+
+    // 2. If auth check is ready AND user IS authenticated AND we have a token, fetch data
+    // Also, ensure `user` is not null before attempting fetches
+    if (isAuthReady && user && token) { // <-- Only fetch if user and token are present
+      console.log('MOOD_PAGE_EFFECT: User authenticated, fetching mood data.');
+      fetchMoodEntries();
+      fetchMoodTrends();
+    }
+    // The empty else-if (isLoading && !user) path is now covered by `!isAuthReady` initial render.
+  }, [user, isAuthReady, token, router]); // <-- Add `token` to dependencies
 
   const fetchMoodEntries = async () => {
     setLoadingEntries(true);
@@ -118,8 +128,17 @@ export default function MoodPage() {
   const getMoodEmoji = (value: number) => MOOD_EMOJIS[value] || '�';
   const getMoodColorClass = (value: number) => MOOD_COLORS[value] || 'bg-gray-100 border-gray-300';
 
-  if (isLoading || !user) {
+  // Render loading state while auth status is being determined
+  if (!isAuthReady) {
+    console.log('MOOD_PAGE_RENDER: isAuthReady is false, showing loading...');
     return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+  }
+
+  // If auth is ready but user is null, this component will return null,
+  // and the useEffect above will handle the redirect.
+  if (!user) {
+    console.log('MOOD_PAGE_RENDER: isAuthReady true, user is null, returning null (redirect expected).');
+    return null;
   }
 
   return (

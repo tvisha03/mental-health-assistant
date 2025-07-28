@@ -1,12 +1,17 @@
 from sqlalchemy.orm import Session
 # --- MODIFIED: Add DATE import ---
 from sqlalchemy import func, extract, DATE # <-- ADD DATE here
+from sqlalchemy.dialects import postgresql # <-- ADD THIS IMPORT for postgresql dialect specific functions
 # --- END MODIFIED ---
 from datetime import datetime, timedelta, date # <-- ADD date import here
 from typing import List, Dict, Any, Optional
 
 from . import models, schemas
 from .auth import security # Import security for password hashing
+
+# --- NEW IMPORT for NLP Service ---
+from app.services.nlp_service import nlp_service_instance as nlp_service # <-- ADD THIS IMPORT
+# --- END NEW IMPORT ---
 
 # Function to get a user by email
 def get_user_by_email(db: Session, email: str):
@@ -99,9 +104,18 @@ def get_mood_trends(db: Session, user_id: int, days: int = 7):
     ]
 
 
-# --- CRUD for JournalEntry ---
-def create_user_journal_entry(db: Session, journal_entry: schemas.JournalEntryCreate, user_id: int):
-    db_journal_entry = models.JournalEntry(**journal_entry.dict(), owner_id=user_id)
+# --- MODIFIED CRUD for JournalEntry (integrate sentiment analysis) ---
+async def create_user_journal_entry(db: Session, journal_entry: schemas.JournalEntryCreate, user_id: int):
+    # Perform sentiment analysis before creating the entry
+    sentiment_result = await nlp_service.analyze_sentiment(journal_entry.content) # <-- CALL NLP SERVICE
+    
+    db_journal_entry = models.JournalEntry(
+        title=journal_entry.title,
+        content=journal_entry.content,
+        owner_id=user_id,
+        sentiment_label=sentiment_result["sentiment_label"], # <-- ADD
+        sentiment_score=sentiment_result["sentiment_score"] # <-- ADD
+    )
     db.add(db_journal_entry)
     db.commit()
     db.refresh(db_journal_entry)
@@ -113,9 +127,16 @@ def get_user_journal_entries(db: Session, user_id: int, skip: int = 0, limit: in
 def get_user_journal_entry(db: Session, journal_entry_id: int, user_id: int):
     return db.query(models.JournalEntry).filter(models.JournalEntry.id == journal_entry_id, models.JournalEntry.owner_id == user_id).first()
 
-def update_user_journal_entry(db: Session, journal_entry_id: int, user_id: int, update_data: dict):
+async def update_user_journal_entry(db: Session, journal_entry_id: int, user_id: int, update_data: Dict[str, Any]):
     db_journal_entry = db.query(models.JournalEntry).filter(models.JournalEntry.id == journal_entry_id, models.JournalEntry.owner_id == user_id).first()
     if db_journal_entry:
+        # If content is being updated, re-run sentiment analysis
+        if "content" in update_data:
+            updated_content = update_data["content"]
+            sentiment_result = await nlp_service.analyze_sentiment(updated_content) # <-- CALL NLP SERVICE
+            update_data["sentiment_label"] = sentiment_result["sentiment_label"] # <-- ADD
+            update_data["sentiment_score"] = sentiment_result["sentiment_score"] # <-- ADD
+
         for key, value in update_data.items():
             setattr(db_journal_entry, key, value)
         db.commit()
@@ -206,3 +227,104 @@ def update_user_profile(db: Session, user: models.User, profile_data: schemas.Us
     db.commit()
     db.refresh(user)
     return user
+
+# --- MODIFIED CRUD Function: get_most_frequent_mood_tags ---
+def get_most_frequent_mood_tags(db: Session, user_id: int, limit: int = 5) -> List[Dict[str, Any]]:
+    """
+    Retrieves the most frequently used mood tags for a user using LATERAL JOIN.
+    """
+    # Define a subquery that unnests the tags array using func.unnest()
+    # and associates each unnested tag with the original mood entry's owner_id
+    unnested_tags_subquery = (
+        db.query(
+            models.MoodEntry.owner_id.label('owner_id'),
+            func.unnest(models.MoodEntry.tags).label('tag') # Unnest the tags array
+        )
+        .filter(models.MoodEntry.tags.isnot(None)) # Only consider entries with tags
+        .subquery()
+    )
+
+    # Now, query from the unnested tags subquery, filter by user, group by tag, and count
+    results = (
+        db.query(
+            unnested_tags_subquery.c.tag,
+            func.count(unnested_tags_subquery.c.tag).label('count')
+        )
+        .filter(unnested_tags_subquery.c.owner_id == user_id)
+        .group_by(unnested_tags_subquery.c.tag)
+        .order_by(func.count(unnested_tags_subquery.c.tag).desc())
+        .limit(limit)
+        .all()
+    )
+    return [{"tag": r.tag, "count": r.count} for r in results]
+
+# --- NEW CRUD Function: Get Daily Mood Averages by Day of Week ---
+def get_average_mood_by_day_of_week(db: Session, user_id: int) -> List[Dict[str, Any]]:
+    """
+    Calculates the average mood for each day of the week (0=Monday, 6=Sunday).
+    """
+    # EXTRACT(DOW FROM timestamp) gives 0=Sunday, 1=Monday...6=Saturday in PostgreSQL.
+    # We want 0=Monday, so we adjust: (EXTRACT(DOW FROM timestamp) + 6) % 7
+    results = (
+        db.query(
+            ((func.extract('dow', models.MoodEntry.timestamp) + 6) % 7).label('day_of_week_num'), # 0=Mon, 1=Tue...6=Sun
+            func.avg(models.MoodEntry.mood_value).label('average_mood')
+        )
+        .filter(models.MoodEntry.owner_id == user_id)
+        .group_by('day_of_week_num')
+        .order_by('day_of_week_num')
+        .all()
+    )
+    # Map numerical day of week to names for easier display
+    day_names = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+    return [
+        {"day": day_names[int(r.day_of_week_num)], "average_mood": round(float(r.average_mood), 2)}
+        for r in results
+    ]
+
+# --- NEW CRUD Function: Get Journal Sentiment Summary (Basic) ---
+def get_journal_sentiment_summary(db: Session, user_id: int) -> Dict[str, Any]:
+    """
+    Provides a basic summary of journal sentiment distribution.
+    """
+    total_entries = db.query(models.JournalEntry).filter(models.JournalEntry.owner_id == user_id).count()
+    if total_entries == 0:
+        return {
+            "total_entries": 0,
+            "positive_percentage": 0,
+            "negative_percentage": 0,
+            "neutral_percentage": 0,
+            "most_common_sentiment": "N/A"
+        }
+
+    sentiment_counts = (
+        db.query(models.JournalEntry.sentiment_label, func.count(models.JournalEntry.sentiment_label))
+        .filter(models.JournalEntry.owner_id == user_id)
+        .group_by(models.JournalEntry.sentiment_label)
+        .all()
+    )
+
+    counts = {label: count for label, count in sentiment_counts}
+    pos_count = counts.get("Positive", 0)
+    neg_count = counts.get("Negative", 0)
+    neu_count = counts.get("Neutral", 0)
+
+    pos_pct = round((pos_count / total_entries) * 100, 2)
+    neg_pct = round((neg_count / total_entries) * 100, 2)
+    neu_pct = round((neu_count / total_entries) * 100, 2)
+
+    most_common = "N/A"
+    if pos_count >= neg_count and pos_count >= neu_count:
+        most_common = "Positive"
+    elif neg_count >= pos_count and neg_count >= neu_count:
+        most_common = "Negative"
+    else:
+        most_common = "Neutral"
+        
+    return {
+        "total_entries": total_entries,
+        "positive_percentage": pos_pct,
+        "negative_percentage": neg_pct,
+        "neutral_percentage": neu_pct,
+        "most_common_sentiment": most_common
+    }

@@ -7,17 +7,35 @@ import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
 
 export default function ResourcesPage() {
-  const { user, isLoading } = useAuth();
+  const { user, isLoading, isAuthReady, token } = useAuth(); // <-- Get `token` and `isAuthReady` as well
   const router = useRouter();
 
   useEffect(() => {
-    if (!isLoading && !user) {
-      router.push('/login'); // Redirect to login if not authenticated
+    // 1. If auth check is ready AND user is NOT authenticated, redirect
+    if (isAuthReady && !user) {
+      console.log('RESOURCES_PAGE_EFFECT: Not authenticated, redirecting to login.');
+      router.push('/login');
+      return; // IMPORTANT: Exit early after redirect
     }
-  }, [user, isLoading, router]);
 
-  if (isLoading || !user) {
+    // 2. If auth check is ready AND user IS authenticated AND we have a token, resources are ready
+    // No additional data fetching needed for static resources page
+    if (isAuthReady && user && token) {
+      console.log('RESOURCES_PAGE_EFFECT: User authenticated, resources ready.');
+    }
+  }, [user, isAuthReady, token, router]); // <-- Add `token` and `isAuthReady` to dependencies
+
+  // Render loading state while auth status is being determined
+  if (!isAuthReady) {
+    console.log('RESOURCES_PAGE_RENDER: isAuthReady is false, showing loading...');
     return <div className="min-h-screen flex items-center justify-center">Loading resources...</div>;
+  }
+
+  // If auth is ready but user is null, this component will return null,
+  // and the useEffect above will handle the redirect.
+  if (!user) {
+    console.log('RESOURCES_PAGE_RENDER: isAuthReady true, user is null, returning null (redirect expected).');
+    return null;
   }
 
   return (

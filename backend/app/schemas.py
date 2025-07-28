@@ -21,10 +21,7 @@ class User(BaseModel):
     triggers: Optional[List[str]] = None # <-- ADD
     areas_of_focus: Optional[List[str]] = None # <-- ADD
 
-    # IMPORTANT: Adjust based on your Pydantic version
-    class Config:
-        orm_mode = True
-    # model_config = {"from_attributes": True} # For Pydantic v2.x.x
+    model_config = {"from_attributes": True}
 
 # Pydantic model for user login (what we expect for login request)
 class UserLogin(BaseModel):
@@ -75,6 +72,8 @@ class JournalEntry(BaseModel):
     content: str
     timestamp: datetime
     owner_id: int
+    sentiment_label: Optional[str] = None # <-- ADD THIS
+    sentiment_score: Optional[float] = None # <-- ADD THIS
 
     model_config = {"from_attributes": True}
 
@@ -106,12 +105,7 @@ class ChatMessage(BaseModel):
     timestamp: datetime
     is_user_message: bool
 
-    # IMPORTANT: Adjust based on your Pydantic version
-    # For Pydantic v1.x.x
-    class Config:
-        orm_mode = True
-    # For Pydantic v2.x.x (uncomment this if you're on V2 and comment out the above)
-    # model_config = {"from_attributes": True}
+    model_config = {"from_attributes": True}
 
 # --- NEW SCHEMA: UserProfileUpdate ---
 class UserProfileUpdate(BaseModel):

@@ -16,20 +16,7 @@ services:
       - "5432:5432" # Map host port 5432 to container port 5432
 
   # Ollama Service for Local LLMs
-  ollama:
-    image: ollama/ollama
-    restart: always
-    volumes:
-      - ollama_models:/root/.ollama # Persist downloaded models
-    ports:
-      - "11434:11434" # Default Ollama API port
-    # Optional: Command to serve and health check
-    command: serve
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:11434"]
-      interval: 30s
-      timeout: 10s
-      retries: 5
+  
 
   # ChromaDB Service (Optional - You can also run Chroma in-process with Python)
   # If you choose to run Chroma as a separate service, uncomment this block

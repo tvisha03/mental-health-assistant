@@ -7,7 +7,7 @@ class Settings:
     DATABASE_URL: str = os.getenv("DATABASE_URL")
     JWT_SECRET: str = os.getenv("JWT_SECRET")
     ALGORITHM: str = os.getenv("ALGORITHM")
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 60
 
     # Add a print statement here to see what's loaded
     def __init__(self):

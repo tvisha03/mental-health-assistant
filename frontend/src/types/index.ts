@@ -60,6 +60,8 @@ export interface JournalEntry {
   content: string;
   timestamp: string; // ISO 8601 string from backend
   owner_id: number;
+  sentiment_label?: string | null; // <-- ADD THIS
+  sentiment_score?: number | null; // <-- ADD THIS
 }
 
 export interface GoalCreate {

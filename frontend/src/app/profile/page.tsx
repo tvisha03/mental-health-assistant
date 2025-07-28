@@ -46,12 +46,12 @@ const FOCUS_AREAS = [
 ];
 
 export default function ProfilePage() {
-  const { user, isLoading, login } = useAuth(); // Need login to re-fetch user after update
+  const { user, isLoading, isAuthReady, refreshUser, token } = useAuth(); // <-- Get `token` as well
   const router = useRouter();
 
   const [fullName, setFullName] = useState('');
   const [dateOfBirth, setDateOfBirth] = useState('');
-  const [gender, setGender] = useState<any>(null); // For react-select
+  const [gender, setGender] = useState<any>(null);
   const [selectedTriggers, setSelectedTriggers] = useState<any[]>([]);
   const [selectedFocusAreas, setSelectedFocusAreas] = useState<any[]>([]);
   const [saveStatus, setSaveStatus] = useState<string | null>(null);
@@ -59,17 +59,24 @@ export default function ProfilePage() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!isLoading && !user) {
+    // 1. If auth check is ready AND user is NOT authenticated, redirect
+    if (isAuthReady && !user) {
+      console.log('PROFILE_PAGE_EFFECT: Not authenticated, redirecting to login.');
       router.push('/login');
-    } else if (user) {
-      // Populate form with existing user data
+      return; // IMPORTANT: Exit early after redirect
+    }
+
+    // 2. If auth check is ready AND user IS authenticated AND we have a token, populate form
+    // Also, ensure `user` is not null before attempting to populate form
+    if (isAuthReady && user && token) { // <-- Only populate if user and token are present
+      console.log('PROFILE_PAGE_EFFECT: User authenticated, populating profile form.');
       setFullName(user.full_name || '');
       setDateOfBirth(user.date_of_birth ? new Date(user.date_of_birth).toISOString().split('T')[0] : '');
       setGender(GENDER_OPTIONS.find(opt => opt.value === user.gender) || null);
       setSelectedTriggers(user.triggers?.map((t: string) => ({ value: t, label: t })) || []);
       setSelectedFocusAreas(user.areas_of_focus?.map((a: string) => ({ value: a, label: a })) || []);
     }
-  }, [user, isLoading, router]);
+  }, [user, isAuthReady, token, router]); // <-- Add `token` to dependencies
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -86,9 +93,9 @@ export default function ProfilePage() {
     };
 
     try {
-      // If a user exists, update their profile
       if (user) {
         await apiClient.put(`/user-profile/me`, updateData);
+        await refreshUser(); // <-- CALL refreshUser() after successful update
         setSaveStatus('Profile updated successfully!');
       }
     } catch (err) {
@@ -100,8 +107,17 @@ export default function ProfilePage() {
     }
   };
 
-  if (isLoading || !user) {
+  // Render loading state while auth status is being determined
+  if (!isAuthReady) {
+    console.log('PROFILE_PAGE_RENDER: isAuthReady is false, showing loading...');
     return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+  }
+
+  // If auth is ready but user is null, this component will return null,
+  // and the useEffect above will handle the redirect.
+  if (!user) {
+    console.log('PROFILE_PAGE_RENDER: isAuthReady true, user is null, returning null (redirect expected).');
+    return null;
   }
 
   return (

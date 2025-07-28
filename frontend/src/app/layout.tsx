@@ -18,9 +18,8 @@ export default function RootLayout({
   children: ReactNode;
 }>) {
   return (
-    <html lang="en">
-      {/* Apply base dark/light mode classes to the body */}
-      <body className={`${inter.className} bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300 flex flex-col min-h-screen`}>
+    <html lang="en" className={`${inter.className} bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300 flex flex-col min-h-screen`}>
+      <body>
         <ThemeProvider>
           <AuthProvider>
             <Header /> {/* <-- RENDER THE HEADER COMPONENT HERE */}

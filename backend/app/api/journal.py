@@ -11,16 +11,17 @@ router = APIRouter(
     tags=["Journaling"]
 )
 
+# --- MODIFIED: Make async and await CRUD calls ---
 @router.post("/", response_model=schemas.JournalEntry, status_code=status.HTTP_201_CREATED)
-def create_journal_entry(
+async def create_journal_entry( # <-- MAKE ASYNC
     journal_entry: schemas.JournalEntryCreate,
     db: Session = Depends(get_db),
     current_user: models.User = Depends(get_current_user)
 ):
     """
-    Create a new journal entry for the authenticated user.
+    Create a new journal entry for the authenticated user with sentiment analysis.
     """
-    return crud.create_user_journal_entry(db=db, journal_entry=journal_entry, user_id=current_user.id)
+    return await crud.create_user_journal_entry(db=db, journal_entry=journal_entry, user_id=current_user.id) # <-- AWAIT
 
 @router.get("/", response_model=List[schemas.JournalEntry])
 def read_journal_entries(
@@ -50,21 +51,21 @@ def read_journal_entry(
     return db_journal_entry
 
 @router.put("/{journal_entry_id}", response_model=schemas.JournalEntry)
-def update_journal_entry(
+async def update_journal_entry( # <-- MAKE ASYNC
     journal_entry_id: int,
-    update_data: Dict[str, Any], # Can be a subset of JournalEntryCreate or a specific update schema
+    update_data: Dict[str, Any],
     db: Session = Depends(get_db),
     current_user: models.User = Depends(get_current_user)
 ):
     """
-    Update a specific journal entry by ID for the authenticated user.
+    Update a specific journal entry by ID for the authenticated user with sentiment re-analysis.
     Supports partial updates.
     """
     db_journal_entry = crud.get_user_journal_entry(db=db, journal_entry_id=journal_entry_id, user_id=current_user.id)
     if db_journal_entry is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Journal entry not found")
 
-    updated_entry = crud.update_user_journal_entry(db=db, journal_entry_id=journal_entry_id, user_id=current_user.id, update_data=update_data)
+    updated_entry = await crud.update_user_journal_entry(db=db, journal_entry_id=journal_entry_id, user_id=current_user.id, update_data=update_data) # <-- AWAIT
     return updated_entry
 
 @router.delete("/{journal_entry_id}", status_code=status.HTTP_204_NO_CONTENT)

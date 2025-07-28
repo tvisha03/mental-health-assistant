@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, DateTime, func, Boolean, ForeignKey, Text
+from sqlalchemy import Column, Integer, String, DateTime, func, Boolean, ForeignKey, Text, Float
 from sqlalchemy.orm import relationship
 # --- NEW IMPORT for PostgreSQL Array type ---
 from sqlalchemy.dialects.postgresql import ARRAY # <-- ADD THIS IMPORT
@@ -43,14 +43,19 @@ class MoodEntry(Base):
     owner = relationship("User", back_populates="mood_entries")
 
 
-# --- JournalEntry and Goal models remain unchanged for now ---
+# --- MODIFIED MODEL: JournalEntry (add sentiment fields) ---
 class JournalEntry(Base):
     __tablename__ = "journal_entries"
+    
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String, nullable=True)
     content = Column(String, nullable=False)
     timestamp = Column(DateTime(timezone=True), server_default=func.now())
     owner_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+
+    sentiment_label = Column(String, nullable=True) # e.g., 'Positive', 'Negative', 'Neutral'
+    sentiment_score = Column(Float, nullable=True) # e.g., 0.85 for positive, -0.6 for negative
+
     owner = relationship("User", back_populates="journal_entries")
 
 
