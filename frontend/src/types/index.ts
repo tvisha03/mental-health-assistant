@@ -16,6 +16,11 @@ export interface User {
   is_active: boolean;
   created_at: string; // Use string for datetime from API, convert to Date object if needed in UI
   updated_at?: string | null;
+  full_name?: string | null; // Optional full name
+  date_of_birth?: string | null; // Optional date of birth
+  gender?: string | null; // Optional gender
+  triggers?: string[] | null; // Optional array of triggers
+  areas_of_focus?: string[] | null; // Optional array of areas of focus
 }
 
 export interface Token {

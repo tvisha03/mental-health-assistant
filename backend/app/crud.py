@@ -196,3 +196,13 @@ def get_user_chat_messages(db: Session, user_id: int, skip: int = 0, limit: int 
     `limit` determines how much history is passed to the LLM.
     """
     return db.query(models.ChatMessage).filter(models.ChatMessage.owner_id == user_id).order_by(models.ChatMessage.timestamp).offset(skip).limit(limit).all()
+
+# --- NEW CRUD Function for User Profile Update ---
+def update_user_profile(db: Session, user: models.User, profile_data: schemas.UserProfileUpdate):
+    update_data = profile_data.dict(exclude_unset=True) # Only update fields that are provided
+    for key, value in update_data.items():
+        setattr(user, key, value)
+    db.add(user) # Or db.merge(user) for detached instances
+    db.commit()
+    db.refresh(user)
+    return user

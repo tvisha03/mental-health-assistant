@@ -16,6 +16,13 @@ class User(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 
+    # --- NEW PROFILE FIELDS ---
+    full_name = Column(String, nullable=True)
+    date_of_birth = Column(DateTime(timezone=True), nullable=True) # Storing as datetime for simplicity, consider just Date
+    gender = Column(String, nullable=True) # e.g., 'Male', 'Female', 'Non-binary', 'Prefer not to say'
+    triggers = Column(ARRAY(String), nullable=True) # e.g., ['work stress', 'social gatherings']
+    areas_of_focus = Column(ARRAY(String), nullable=True) # e.g., ['anxiety', 'sleep quality', 'self-esteem']
+
     mood_entries = relationship("MoodEntry", back_populates="owner", cascade="all, delete-orphan")
     journal_entries = relationship("JournalEntry", back_populates="owner", cascade="all, delete-orphan")
     goals = relationship("Goal", back_populates="owner", cascade="all, delete-orphan")

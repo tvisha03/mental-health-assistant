@@ -15,8 +15,16 @@ class User(BaseModel):
     is_active: bool
     created_at: datetime
     updated_at: Optional[datetime] = None # Allow None for updated_at initially
+    full_name: Optional[str] = None # <-- ADD
+    date_of_birth: Optional[datetime] = None # <-- ADD
+    gender: Optional[str] = None # <-- ADD
+    triggers: Optional[List[str]] = None # <-- ADD
+    areas_of_focus: Optional[List[str]] = None # <-- ADD
 
-    model_config = {"from_attributes": True}
+    # IMPORTANT: Adjust based on your Pydantic version
+    class Config:
+        orm_mode = True
+    # model_config = {"from_attributes": True} # For Pydantic v2.x.x
 
 # Pydantic model for user login (what we expect for login request)
 class UserLogin(BaseModel):
@@ -104,3 +112,11 @@ class ChatMessage(BaseModel):
         orm_mode = True
     # For Pydantic v2.x.x (uncomment this if you're on V2 and comment out the above)
     # model_config = {"from_attributes": True}
+
+# --- NEW SCHEMA: UserProfileUpdate ---
+class UserProfileUpdate(BaseModel):
+    full_name: Optional[str] = None
+    date_of_birth: Optional[datetime] = None # Or date
+    gender: Optional[str] = None
+    triggers: Optional[List[str]] = None
+    areas_of_focus: Optional[List[str]] = None
