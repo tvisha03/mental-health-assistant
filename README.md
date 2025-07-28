@@ -113,49 +113,49 @@ The application follows a modular, client-server architecture:
 
 ```mermaid
 graph TD
-    subgraph Frontend [Web Browser / Client App (Next.js)]
+    subgraph Frontend["Web Browser / Client App (Next.js)"]
         UI --> API_Calls
-        UserAuthUI(Login/Register) --> API_Calls
-        MoodUI(Mood Tracking) --> API_Calls
-        JournalUI(Journaling) --> API_Calls
-        ChatUI(Chatbot Interface) --> API_Calls
-        ProfileUI(Profile Settings) --> API_Calls
-        InsightsUI(Insights Display) --> API_Calls
-        HeaderNav(Global Navigation) --> UI
-        DarkModeToggle(Dark Mode Toggle) --> UI
+        UserAuthUI["Login/Register"] --> API_Calls
+        MoodUI["Mood Tracking"] --> API_Calls
+        JournalUI["Journaling"] --> API_Calls
+        ChatUI["Chatbot Interface"] --> API_Calls
+        ProfileUI["Profile Settings"] --> API_Calls
+        InsightsUI["Insights Display"] --> API_Calls
+        HeaderNav["Global Navigation"] --> UI
+        DarkModeToggle["Dark Mode Toggle"] --> UI
     end
 
-    subgraph Backend [FastAPI Application (Python)]
-        API_Calls --> Router(API Routers)
-        Router --> Auth(Auth Logic)
-        Router --> DataAPI(Mood/Journal/Profile/Resource/Exercise API)
-        Router --> InsightsAPI(Insights API)
-        Router --> ChatAPI(Chatbot API)
-        ChatAPI --> RAGService(RAG Service)
-        InsightsAPI --> CRUD(CRUD Operations)
+    subgraph Backend["FastAPI Application (Python)"]
+        API_Calls --> Router["API Routers"]
+        Router --> Auth["Auth Logic"]
+        Router --> DataAPI["Mood/Journal/Profile/Resource/Exercise API"]
+        Router --> InsightsAPI["Insights API"]
+        Router --> ChatAPI["Chatbot API"]
+        ChatAPI --> RAGService["RAG Service"]
+        InsightsAPI --> CRUD["CRUD Operations"]
         DataAPI --> CRUD
         RAGService --> CRUD
-        RAGService --> LLM(Google Gemini API)
-        RAGService --> VectorDB(ChromaDB)
+        RAGService --> LLM["Google Gemini API"]
+        RAGService --> VectorDB["ChromaDB"]
     end
 
-    subgraph Databases
-        CRUD --> PostgreSQL(PostgreSQL DB)
-        VectorDB --> LocalFiles(ChromaDB Files)
+    subgraph Databases["Data Storage"]
+        CRUD --> PostgreSQL["PostgreSQL DB"]
+        VectorDB --> LocalFiles["ChromaDB Files"]
     end
 
-    subgraph External_Services
-        LLM --> GoogleAPI(Google Gemini Cloud)
+    subgraph External_Services["External Services"]
+        LLM --> GoogleAPI["Google Gemini Cloud"]
     end
 
-    PostgreSQL -- Data Persistence --> LocalhostDB(Docker PostgreSQL Container)
-    LocalhostDB -- DB Connection --> Backend
-    GoogleAPI -- API Calls --> LLM
+    PostgreSQL -.->|"Data Persistence"| LocalhostDB["Docker PostgreSQL Container"]
+    LocalhostDB -.->|"DB Connection"| Backend
+    GoogleAPI -.->|"API Calls"| LLM
 
-    style Frontend fill:#f0f8ff,stroke:#333,stroke-width:2px;
-    style Backend fill:#e0ffe0,stroke:#333,stroke-width:2px;
-    style Databases fill:#fff0f0,stroke:#333,stroke-width:2px;
-    style External_Services fill:#f8f8ff,stroke:#333,stroke-width:2px;
+    style Frontend fill:#f0f8ff,stroke:#333,stroke-width:2px
+    style Backend fill:#e0ffe0,stroke:#333,stroke-width:2px
+    style Databases fill:#fff0f0,stroke:#333,stroke-width:2px
+    style External_Services fill:#f8f8ff,stroke:#333,stroke-width:2px
 ```
 
 ## Getting Started (Local Development Setup)
